@@ -167,7 +167,7 @@ build/trunctfdf2.o \
 build/trunctfhf2.o \
 build/trunctfsf2.o 
 
-RISCV_OBJ := build/fp_mode.o
+RISCV_OBJ := build/fp_mode.o build/muldi3.S.o
 # build/save.o \
 # build/restore.o\
 
@@ -182,6 +182,10 @@ build/%.o: compiler-rt/lib/builtins/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $<
 
 build/%.o: compiler-rt/lib/builtins/riscv/*.c
+	@echo build $<
+	@$(CC) $(CFLAGS) -c -o $@ $<
+
+build/muldi3.S.o: compiler-rt/lib/builtins/riscv/muldi3.S
 	@echo build $<
 	@$(CC) $(CFLAGS) -c -o $@ $<
 
