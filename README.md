@@ -2,7 +2,7 @@
 
 This project is **completely** copied and cut from the llvm project:
 
-- Repo: `https://github.com/llvm/llvm-project`,
+- Repo: `https://github.com/llvm/llvm-project`
 - Branch: `release/16.x`
 - Commit: `7cbf1a259`
 
