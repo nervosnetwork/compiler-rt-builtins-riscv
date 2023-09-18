@@ -14,10 +14,11 @@ ifeq ($(UNAME), Darwin)
 	AR := llvm-ar
 endif
 
-CFLAGS := --target=riscv64 -march=rv64imc_zba_zbb_zbc_zbs 
+CFLAGS := --target=riscv64-unknown-elf  -march=rv64imc_zba_zbb_zbc_zbs -mabi=lp64 
 CFLAGS += -Os
-CFLAGS += -fdata-sections -ffunction-sections -fno-builtin-printf -fno-builtin-memcmp
+CFLAGS += -fdata-sections -ffunction-sections -fno-builtin -fvisibility=hidden -fomit-frame-pointer
 CFLAGS += -I compiler-rt/lib/builtins
+CFLAGS += -DVISIBILITY_HIDDEN -DCOMPILER_RT_HAS_FLOAT16
 
 RT_OBJ := build/fixunsdfdi.o \
 build/absvdi2.o \
@@ -171,9 +172,9 @@ RISCV_OBJ := build/fp_mode.o
 # build/restore.o\
 
 
-all: build/compiler-rt.a
+all: build/libcompiler-rt.a
 
-build/compiler-rt.a: $(RT_OBJ) $(RISCV_OBJ)
+build/libcompiler-rt.a: $(RT_OBJ) $(RISCV_OBJ)
 	$(AR) -rc $@ $^
 
 build/%.o: compiler-rt/lib/builtins/%.c
@@ -183,3 +184,7 @@ build/%.o: compiler-rt/lib/builtins/%.c
 build/%.o: compiler-rt/lib/builtins/riscv/*.c
 	@echo build $<
 	@$(CC) $(CFLAGS) -c -o $@ $<
+
+clean: 
+	rm -f build/*.o
+	rm -f build/*.a
