@@ -14,7 +14,7 @@ ifeq ($(UNAME), Darwin)
 	AR := llvm-ar
 endif
 
-CFLAGS := --target=riscv64-unknown-elf  -march=rv64imc_zba_zbb_zbc_zbs -mabi=lp64 
+CFLAGS := --target=riscv64  -march=rv64imc_zba_zbb_zbc_zbs -mabi=lp64 
 CFLAGS += -Os
 CFLAGS += -fdata-sections -ffunction-sections -fno-builtin -fvisibility=hidden -fomit-frame-pointer
 CFLAGS += -I compiler-rt/lib/builtins
