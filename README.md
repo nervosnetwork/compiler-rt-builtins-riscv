@@ -15,7 +15,7 @@ LDFLAGS += -L./build -lcompiler-rt
 This project is **completely** from the llvm project:
 
 - Repo: `https://github.com/llvm/llvm-project`
-- Branch: `release/16.x`
-- Commit: `7cbf1a259`
+- Branch: `master`
+- Commit: `a3fb2348b19167dfb027e20f8e1306ebbf31cfbf`
 
 See more: https://github.com/llvm/llvm-project/blob/release/16.x/compiler-rt/lib/builtins/README.txt
