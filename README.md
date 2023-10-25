@@ -18,4 +18,8 @@ This project is **completely** from the llvm project:
 - Branch: `release/16.x`
 - Commit: `7cbf1a259`
 
+At the same time, we pulled the following commit from LLVM main branch to fix some bugs in clang-16:
+
+- <https://github.com/llvm/llvm-project/commit/ff14585eb02f>
+
 See more: https://github.com/llvm/llvm-project/blob/release/16.x/compiler-rt/lib/builtins/README.txt
