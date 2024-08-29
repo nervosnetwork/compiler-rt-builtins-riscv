@@ -7,7 +7,8 @@ we possess the capability to construct it entirely from scratch.
 ## Build
 To build it, run `make`, the static library will be generated at `build/libcompiler-rt.a`.
 Then use following Makefile configuration:
-```
+
+```text
 LDFLAGS += -L./build -lcompiler-rt
 ```
 
@@ -15,11 +16,7 @@ LDFLAGS += -L./build -lcompiler-rt
 This project is **completely** from the llvm project:
 
 - Repo: `https://github.com/llvm/llvm-project`
-- Branch: `release/16.x`
-- Commit: `7cbf1a259`
+- Branch: `release/18.x`
+- Commit: `3b5b5c1`
 
-At the same time, we pulled the following commit from LLVM main branch to fix some bugs in clang-16:
-
-- <https://github.com/llvm/llvm-project/commit/ff14585eb02f>
-
-See more: https://github.com/llvm/llvm-project/blob/release/16.x/compiler-rt/lib/builtins/README.txt
+See more: https://github.com/llvm/llvm-project/blob/release/18.x/compiler-rt/lib/builtins/README.txt
