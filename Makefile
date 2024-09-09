@@ -1,10 +1,8 @@
-
-
-CC := clang-16
-LD := ld.lld-16
-OBJCOPY := llvm-objcopy-16
-AR := llvm-ar-16
-RANLIB := llvm-ranlib-16
+CC := clang-18
+LD := ld.lld-18
+OBJCOPY := llvm-objcopy-18
+AR := llvm-ar-18
+RANLIB := llvm-ranlib-18
 
 UNAME := $(shell uname)
 ifeq ($(UNAME), Darwin)
@@ -14,18 +12,19 @@ ifeq ($(UNAME), Darwin)
 	AR := llvm-ar
 endif
 
-CFLAGS := --target=riscv64  -march=rv64imc_zba_zbb_zbc_zbs -mabi=lp64 
+CFLAGS := --target=riscv64 -march=rv64imc_zba_zbb_zbc_zbs -mabi=lp64
 CFLAGS += -Os
 CFLAGS += -fdata-sections -ffunction-sections -fno-builtin -fvisibility=hidden -fomit-frame-pointer
 CFLAGS += -I compiler-rt/lib/builtins
 CFLAGS += -DVISIBILITY_HIDDEN -DCOMPILER_RT_HAS_FLOAT16
 
-RT_OBJ := build/fixunsdfdi.o \
+RT_OBJ := \
 build/absvdi2.o \
 build/absvsi2.o \
 build/absvti2.o \
 build/adddf3.o \
 build/addsf3.o \
+build/addtf3.o \
 build/addvdi3.o \
 build/addvsi3.o \
 build/addvti3.o \
@@ -36,6 +35,7 @@ build/ashrdi3.o \
 build/ashrti3.o \
 build/bswapdi2.o \
 build/bswapsi2.o \
+build/clear_cache.o \
 build/clzdi2.o \
 build/clzsi2.o \
 build/clzti2.o \
@@ -43,6 +43,9 @@ build/cmpdi2.o \
 build/cmpti2.o \
 build/comparedf2.o \
 build/comparesf2.o \
+build/comparetf2.o \
+build/crtbegin.o \
+build/crtend.o \
 build/ctzdi2.o \
 build/ctzsi2.o \
 build/ctzti2.o \
@@ -55,9 +58,16 @@ build/divmodti4.o \
 build/divsc3.o \
 build/divsf3.o \
 build/divsi3.o \
+build/divtc3.o \
+build/divtf3.o \
 build/divti3.o \
-build/extendsfdf2.o \
+build/extendbfsf2.o \
+build/extenddftf2.o \
 build/extendhfsf2.o \
+build/extendhftf2.o \
+build/extendsfdf2.o \
+build/extendsftf2.o \
+build/extendxftf2.o \
 build/ffsdi2.o \
 build/ffssi2.o \
 build/ffsti2.o \
@@ -67,25 +77,38 @@ build/fixdfti.o \
 build/fixsfdi.o \
 build/fixsfsi.o \
 build/fixsfti.o \
+build/fixtfdi.o \
+build/fixtfsi.o \
+build/fixtfti.o \
 build/fixunsdfdi.o \
 build/fixunsdfsi.o \
 build/fixunsdfti.o \
 build/fixunssfdi.o \
 build/fixunssfsi.o \
 build/fixunssfti.o \
+build/fixunstfdi.o \
+build/fixunstfsi.o \
+build/fixunstfti.o \
 build/floatdidf.o \
 build/floatdisf.o \
+build/floatditf.o \
 build/floatsidf.o \
 build/floatsisf.o \
+build/floatsitf.o \
 build/floattidf.o \
 build/floattisf.o \
+build/floattitf.o \
 build/floatundidf.o \
 build/floatundisf.o \
+build/floatunditf.o \
 build/floatunsidf.o \
 build/floatunsisf.o \
+build/floatunsitf.o \
 build/floatuntidf.o \
 build/floatuntisf.o \
+build/floatuntitf.o \
 build/fp_mode.o \
+build/gcc_personality_v0.o \
 build/int_util.o \
 build/lshrdi3.o \
 build/lshrti3.o \
@@ -100,6 +123,8 @@ build/mulosi4.o \
 build/muloti4.o \
 build/mulsc3.o \
 build/mulsf3.o \
+build/multc3.o \
+build/multf3.o \
 build/multi3.o \
 build/mulvdi3.o \
 build/mulvsi3.o \
@@ -120,15 +145,23 @@ build/popcountsi2.o \
 build/popcountti2.o \
 build/powidf2.o \
 build/powisf2.o \
+build/powitf2.o \
 build/subdf3.o \
 build/subsf3.o \
+build/subtf3.o \
 build/subvdi3.o \
 build/subvsi3.o \
 build/subvti3.o \
 build/trampoline_setup.o \
+build/truncdfbf2.o \
 build/truncdfhf2.o \
 build/truncdfsf2.o \
+build/truncsfbf2.o \
 build/truncsfhf2.o \
+build/trunctfdf2.o \
+build/trunctfhf2.o \
+build/trunctfsf2.o \
+build/trunctfxf2.o \
 build/ucmpdi2.o \
 build/ucmpti2.o \
 build/udivdi3.o \
@@ -139,38 +172,11 @@ build/udivsi3.o \
 build/udivti3.o \
 build/umoddi3.o \
 build/umodsi3.o \
-build/umodti3.o \
-build/addtf3.o \
-build/comparetf2.o \
-build/divtc3.o \
-build/divtf3.o \
-build/extenddftf2.o \
-build/extendhftf2.o \
-build/extendsftf2.o \
-build/fixtfdi.o \
-build/fixtfsi.o \
-build/fixtfti.o \
-build/fixunstfdi.o \
-build/fixunstfsi.o \
-build/fixunstfti.o \
-build/floatditf.o \
-build/floatsitf.o \
-build/floattitf.o \
-build/floatunditf.o \
-build/floatunsitf.o \
-build/floatuntitf.o \
-build/multc3.o \
-build/multf3.o \
-build/powitf2.o \
-build/subtf3.o \
-build/trunctfdf2.o \
-build/trunctfhf2.o \
-build/trunctfsf2.o 
+build/umodti3.o
 
-RISCV_OBJ := build/fp_mode.o build/muldi3.S.o
-# build/save.o \
-# build/restore.o\
-
+RISCV_OBJ := \
+	build/fp_mode.o \
+	build/muldi3.S.o
 
 all: build/libcompiler-rt.a
 
@@ -189,6 +195,6 @@ build/muldi3.S.o: compiler-rt/lib/builtins/riscv/muldi3.S
 	@echo build $<
 	@$(CC) $(CFLAGS) -c -o $@ $<
 
-clean: 
+clean:
 	rm -f build/*.o
 	rm -f build/*.a
