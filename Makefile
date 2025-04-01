@@ -1,8 +1,5 @@
 CC := clang
-LD := ld.lld
-OBJCOPY := llvm-objcopy
 AR := llvm-ar
-RANLIB := llvm-ranlib
 
 CFLAGS := --target=riscv64 -march=rv64imc_zba_zbb_zbc_zbs -mabi=lp64
 CFLAGS += -Os
