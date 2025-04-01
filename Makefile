@@ -1,16 +1,5 @@
-CC := clang-18
-LD := ld.lld-18
-OBJCOPY := llvm-objcopy-18
-AR := llvm-ar-18
-RANLIB := llvm-ranlib-18
-
-UNAME := $(shell uname)
-ifeq ($(UNAME), Darwin)
-	LD := ld.lld
-	OBJCOPY := llvm-objcopy
-	RANLIB := llvm-ranlib
-	AR := llvm-ar
-endif
+CC := clang
+AR := llvm-ar
 
 CFLAGS := --target=riscv64 -march=rv64imc_zba_zbb_zbc_zbs -mabi=lp64
 CFLAGS += -Os
