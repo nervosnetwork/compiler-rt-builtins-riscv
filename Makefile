@@ -1,7 +1,9 @@
-CC := clang
-AR := llvm-ar
+CC := clang-21
+AR := llvm-ar-21
 
-CFLAGS := --target=riscv64 -march=rv64imc_zba_zbb_zbc_zbs -mabi=lp64
+CFLAGS := --target=riscv64-unknown-elf -march=rv64imc_zba_zbb_zbc_zbs_zicfiss1p0_zicfilp1p0
+CFLAGS += -mabi=lp64
+CFLAGS += -menable-experimental-extensions -fcf-protection=full -mcf-branch-label-scheme=func-sig
 CFLAGS += -Os
 CFLAGS += -fdata-sections -ffunction-sections -fno-builtin -fvisibility=hidden -fomit-frame-pointer
 CFLAGS += -I compiler-rt/lib/builtins
