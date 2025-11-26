@@ -1,7 +1,25 @@
 CC := clang
 AR := llvm-ar
 
+ifdef CFI
+$(info Info: build with CFI enabled)
+CLANG_VERSION := $(shell $(CC) --version | head -n1 | sed -n 's/.*version \([0-9]*\)\..*/\1/p')
+ifeq ($(shell test $(CLANG_VERSION) -ge 21; echo $$?),0)
+CFLAGS := --target=riscv64 -march=rv64imc_zba_zbb_zbc_zbs_zicfiss1p0_zicfilp1p0 -mabi=lp64
+CFLAGS += -menable-experimental-extensions -fcf-protection=full
+ifeq ($(CFI),unlabeled)
+CFLAGS += -mcf-branch-label-scheme=unlabeled
+else ifeq ($(CFI),func-sig)
+CFLAGS += -mcf-branch-label-scheme=func-sig
+else
+$(error Error: CFI is set to '$(CFI)' but expected 'unlabeled' or 'func-sig')
+endif
+else
+$(error Error: CFI requires clang version 21 or above, but found version $(CLANG_VERSION))
+endif
+else
 CFLAGS := --target=riscv64 -march=rv64imc_zba_zbb_zbc_zbs -mabi=lp64
+endif
 CFLAGS += -Os
 CFLAGS += -fdata-sections -ffunction-sections -fno-builtin -fvisibility=hidden -fomit-frame-pointer
 CFLAGS += -I compiler-rt/lib/builtins

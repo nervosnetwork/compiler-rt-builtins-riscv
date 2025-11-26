@@ -11,15 +11,17 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
-    - name: Install llvm 18
+    - name: Install llvm 21
       run: |
-        sudo apt-get purge --auto-remove llvm python3-lldb-14 llvm-14
         wget https://apt.llvm.org/llvm.sh
         chmod +x llvm.sh
-        sudo ./llvm.sh 18
+        sudo ./llvm.sh 21
         rm llvm.sh
-    - name: Fix llvm-ar path
+    - name: Fix llvm path
       run: |
-        sudo ln -s $(which llvm-ar-18) /usr/bin/llvm-ar || true
+        sudo ln -sf $(which llvm-ar-21) /usr/bin/llvm-ar
+        sudo ln -sf $(which clang-21) /usr/bin/clang
     - name: Build
       run: make
+    - name: Build with CFI enabled
+      run: make clean && make CFI=unlabeled
