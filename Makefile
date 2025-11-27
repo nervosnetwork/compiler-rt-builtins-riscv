@@ -1,7 +1,24 @@
 CC := clang
 AR := llvm-ar
 
-CFLAGS := --target=riscv64 -march=rv64imc_zba_zbb_zbc_zbs -mabi=lp64
+define get_cfi_cflags
+$(if $(1),\
+    $(info Info: build with CFI enabled)\
+    $(eval _CLANG_VERSION := $(shell $(CC) --version | head -n1 | sed -n 's/.*version \([0-9]*\)\..*/\1/p'))\
+    $(if $(shell test $(_CLANG_VERSION) -ge 21 && echo 1),\
+        --target=riscv64 -march=rv64imc_zba_zbb_zbc_zbs_zicfiss1p0_zicfilp1p0 -mabi=lp64 \
+        -menable-experimental-extensions -fcf-protection=full \
+        $(if $(filter unlabeled,$(1)),\
+            -mcf-branch-label-scheme=unlabeled,\
+        $(if $(filter func-sig,$(1)),\
+            -mcf-branch-label-scheme=func-sig,\
+            $(error Error: CFI is set to '$(1)' but expected 'unlabeled' or 'func-sig'))),\
+        $(error Error: CFI requires clang version 21 or above, but found version $(_CLANG_VERSION))),\
+    --target=riscv64 -march=rv64imc_zba_zbb_zbc_zbs -mabi=lp64)
+endef
+
+CFLAGS := $(call get_cfi_cflags,$(CFI))
+
 CFLAGS += -Os
 CFLAGS += -fdata-sections -ffunction-sections -fno-builtin -fvisibility=hidden -fomit-frame-pointer
 CFLAGS += -I compiler-rt/lib/builtins
